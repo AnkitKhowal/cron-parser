@@ -1,0 +1,152 @@
+Write a command line application or script which parses a cron string and expands each field
+to show the times at which it will run. You may use whichever language you feel most
+comfortable with.
+
+
+
+Please do not use existing cron parser libraries for this exercise. Whilst it’s generally a good
+idea to use pre-built libraries, we want to assess your ability to create your own!
+
+
+You should only consider the standard cron format with five time fields (minute, hour, day of
+month, month, and day of week) plus a command, and you do not need to handle the special
+time strings such as "@yearly". The input will be on a single line.
+
+input
+-------
+The cron string will be passed to your application as a single argument.
+~$ your-program "d"
+
+
+output
+---------
+The output should be formatted as a table with the field name taking the first 14 columns and
+the times as a space-separated list following it.
+
+
+Example
+-----------
+
+Input
+"* * * * * /usr/bin/find"
+
+
+output
+minute 0 15 30 45
+hour 0
+day of month 1 15
+month 1 2 3 4 5 6 7 8 9 10 11 12
+day of week 1 2 3 4 5
+command /usr/bin/find
+
+
+
+Readme
+TestCases
+
+Steps:
+Install Node JS in your system
+Unzip and run npm Install
+Run the command "ts-node src/main.ts "*/15 0 1,15 * 1-5 /usr/bin/find"
+
+
+ts-node src/main.ts "*/15 * * * * /usr/bin/find"
+
+
+Steps 
+
+1. Take input string , do basic validation , like fileds should be six , command should not be empty
+2. Go through each field and validate the field value
+    -- minuteField
+            -- If numeric Value (should be between 0-59)
+            -- (valueList)-- Should be comman seperated values, values cannot be between 1,59
+            -- (range values) -- Values should be between 0-59 (Should be ascending)
+            -- * means will run for all values from 0-59
+            -- characters allowed *, , ,- , /
+            */2 step values
+            ---Step values can be used in conjunction with ranges. The syntax range/step defines the range and an execution interval.
+                0-59/3 -0, 3,,6,9,12
+                3-59/3 - 3, 6, 9
+                6-59/10 -- 6, 16, 26, 36, 46, 56
+                7/10 = 7,17,27,37,47,57
+                6/61 = 
+
+                */2 = 2,4,6,8,10,12,14,16,18
+     -- hour
+            -- If numeric Value (should be between 0-23)
+            -- characters allowed *, , ,- , /
+            ,(valueList)-- Should be comman seperated values, values should be between 0,23
+            -(range values) -- Values should be between 0-23
+            * means will run for all values from 0-23
+            */2 step values
+            ---Step values can be used in conjunction with ranges. The syntax range/step defines the range and an execution interval.
+                0-23/3 -0, 3,6,9,12
+                3-23/3 - 3, 6, 9
+                6-23/10 -- 6, 16,
+                7/10 = 7,17,
+
+                */5 = 5,10,15,20
+
+    -- day(month)
+            -- If numeric Value (should be between 1-31)
+            -- characters allowed *, , ,- , /
+            ,(valueList)-- Should be comman seperated values, values should be between 1,31
+            -(range values) -- Values should be between 1-31
+            * means will run for all values from 1-31
+            */2 step values
+            ---Step values can be used in conjunction with ranges. The syntax range/step defines the range and an execution interval.
+                [Range]/Interval
+                0-23/3 -0, 3,,6,9,12
+                3-23/3 - 3, 6, 9
+                6-23/10 -- 6, 16,
+                7/10 = 7,17,
+
+                */30 = 30
+
+    -- month
+
+            -- If numeric Value (should be between 1-12)
+            -- If string Value (should be between JAN-DEC)
+            -- characters allowed *, , ,- , /
+            ,(valueList)-- Should be comman seperated values, values should be between 1,12
+            valueList -- Can Also be sring, JAN , JUN , SEP
+
+            -(range values) -- Values should be between 1-12
+            valueList -- Can Also be sring, [JAN-JUN]
+
+
+            * means will run for all values from 1-12
+
+            */2 step values
+            ---Step values can be used in conjunction with ranges. The syntax range/step defines the range and an execution interval.
+                [Range]/Interval
+                1-12/3 -4,7,10
+                3-12/5 - 8, 3,8
+                
+                */3 = 3,6,9,12
+                Jan/3 = 
+                aug/4 = DEC
+    
+
+    -- Day (Week)
+
+            -- If numeric Value (should be between 0-6)
+            -- If string Value (should be between SUN-SAT)
+            -- characters allowed *, , ,- , /
+            ,(valueList)-- Should be comman seperated values, values should be between 0,6
+            valueList -- Can Also be sring, SUN , WED , FRI
+
+            -(range values) -- Values should be between 0-6 (Should be ascending)
+            valueList -- Can Also be sring, [JAN-JUN](Should be ascending)
+
+
+            * means will run for all values from 0,1,2,3,4,5,6
+
+            */2 step values
+            ---Step values can be used in conjunction with ranges. The syntax range/step defines the range and an execution interval.
+                [Range]/Interval
+                0-6/3 =3,6
+                3-6/5 = 5
+                
+                mon-thu/6 = 
+                tue/4 = wed
